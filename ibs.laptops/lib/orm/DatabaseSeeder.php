@@ -24,7 +24,8 @@ final class DatabaseSeeder
         ['TITLE' => 'Ideapad', 'MANUFACTURER_ID' => 1],
         ['TITLE' => 'MacBook Pro', 'MANUFACTURER_ID' => 2],
         ['TITLE' => 'MacBook Air', 'MANUFACTURER_ID' => 2],
-        ['TITLE' => 'Modern', 'MANUFACTURER_ID' => 3]
+        ['TITLE' => 'Modern', 'MANUFACTURER_ID' => 3],
+        ['TITLE' => 'Gaming', 'MANUFACTURER_ID' => 3]
     ];
 
     private const LAPTOP_TITLES = [
@@ -35,11 +36,11 @@ final class DatabaseSeeder
         'Aspire',
         'XPS',
         'MacBook Pro',
-        'Xiaomi',
+        'Nitro',
     ];
 
     private const OPTIONS = [
-        ['TITLE' => 'Wi-Fi 6.0 / 7.0 '],
+        ['TITLE' => 'Wi-Fi 6.0 / 7.0'],
         ['TITLE' => 'Экран на выбор: FullHD 120 HZ или 4K 60HZ'],
         ['TITLE' => 'Установка до 128гб ОЗУ'],
         ['TITLE' => 'Матрица: VA или IPS'],
@@ -137,17 +138,15 @@ final class DatabaseSeeder
 
 
         for ($i = 1; $i <= 40; $i++) {
-            $num = random_int(min: 1, max: 5);
+            $number = random_int(min: 1, max: 6);
 
             $laptops = [
-                'TITLE' => self::LAPTOP_TITLES[array_rand(array: self::LAPTOP_TITLES)] . ' ' . random_int(
-                        min: 1,
-                        max: 20
-                    ),
+                'TITLE' => self::LAPTOP_TITLES[array_rand(
+                        array: self::LAPTOP_TITLES)] . ' ' . $number,
                 'YEAR' => $years[array_rand(array: $years)],
                 'PRICE' => random_int(min: 50000, max: 250000),
-                'LIST_IMAGE' => '/images/laptops/laptop_' . $num . '_256x256.jpg',
-                'DETAIL_IMAGE' => '/images/laptops/laptop_' . $num . '_512x512.jpg',
+                'LIST_IMAGE' => '/images/laptops/laptop_' . $number . '_256x256.png',
+                'DETAIL_IMAGE' => '/images/laptops/laptop_' . $number . '_512x512.png',
                 'MODEL_ID' => $models[array_rand(array: $models)]['ID'],
             ];
 
@@ -208,7 +207,7 @@ final class DatabaseSeeder
         )->fetchAll();
 
         foreach ($laptops as $laptop) {
-            $randomOptions = array_rand(array: $options,num: random_int(min: 1, max: count(value: $options)));
+            $randomOptions = array_rand(array: $options, num: random_int(min: 1, max: count(value: $options)));
 
             $randomOptions = is_array(value: $randomOptions) ? $randomOptions : [$randomOptions];
 

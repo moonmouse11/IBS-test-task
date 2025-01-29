@@ -22,7 +22,7 @@ $arComponentParameters = [
             'PARENT' => 'BASE',
             'NAME' => 'Каталог для SEF URL',
             'TYPE' => 'STRING',
-            'DEFAULT' => '/catalog/',
+            'DEFAULT' => '/laptops/',
         ],
     ],
 ];

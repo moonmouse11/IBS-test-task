@@ -40,7 +40,7 @@ final class LaptopListComponent extends CBitrixComponent
             return;
         }
 
-        $this->determineLevel();
+        $this->checkSEF();
         $componentPage = $this->arResult['COMPONENT_PAGE'];
         $usePagination = false;
 
@@ -72,91 +72,106 @@ final class LaptopListComponent extends CBitrixComponent
         }
 
         if ($usePagination) {
-            $nav = $this->getPagination();
-            $parameters['limit'] = $nav->getLimit();
-            $parameters['offset'] = $nav->getOffset();
+            $pageNavigation = $this->getPagination();
+            $parameters['limit'] = $pageNavigation->getLimit();
+            $parameters['offset'] = $pageNavigation->getOffset();
 
-            // Добавляем сортировку
             $request = Context::getCurrent()?->getRequest();
-            $sortBy = in_array($request->getQuery("sort_by"), ['PRICE', 'YEAR']) ?
-                $request->getQuery("sort_by") : 'PRICE'; // Установим сортировку по цене по умолчанию
-            $sortOrder = in_array($request->getQuery("sort_order"), ['ASC', 'DESC']) ?
-                $request->getQuery("sort_order") : 'ASC'; // По умолчанию по возрастанию
 
-            $parameters['order'] = [$sortBy => $sortOrder]; // Обновляем параметры сортировки
+            $sortBy = in_array(needle: $request->getQuery(name: 'sort_by'), haystack: ['PRICE', 'YEAR'], strict: false)
+                ? $request->getQuery(name: 'sort_by')
+                : 'PRICE';
+
+            $sortOrder = in_array(
+                needle: $request->getQuery(name: 'sort_order'),
+                haystack: ['ASC', 'DESC'],
+                strict: false
+            )
+                ? $request->getQuery(name: 'sort_order')
+                : 'ASC';
+
+            $parameters['order'] = [$sortBy => $sortOrder];
+
             $this->arResult['REQUEST'] = Context::getCurrent()?->getRequest();
         }
 
-        if (mb_strlen($componentPage) == 0) {
-            $componentPage = 'undefined';
-        }
+        if ($componentPage !== '') {
+            $items = $className::getList(parameters: $parameters);
 
-        if ($componentPage !== 'undefined') {
-            $items = $className::getList($parameters);
             if ($usePagination) {
-                $totalCount = $className::getCount(
-                    $parameters['filter']
-                ); // Подсчет общего количества записей для текущего фильтра
-                $nav->setRecordCount($totalCount); // Устанавливаем количество записей
-                $this->arResult['NAV_OBJECT'] = $nav;  // Добавляем объект навигации в arResult
+                $totalCount = $className::getCount(filter: $parameters['filter']);
+                $pageNavigation->setRecordCount(n: $totalCount);
+                $this->arResult['NAV_OBJECT'] = $pageNavigation;
             }
 
             foreach ($items as $item) {
                 $this->arResult['DATA'][] = $item;
             }
         }
-        $this->includeComponentTemplate($componentPage);
+        $this->includeComponentTemplate(templatePage: $componentPage);
     }
 
 
     /**
-     * Определяет текущий уровень URL и тип компонента (производители, модели или ноутбуки).
-     * На основе переданных параметров SEF_URL_TEMPLATES определяет, какой раздел каталога будет отображен.
+     * @description Check SEF route of component
+     *
      * @return void
      */
-    protected function determineLevel()
+    protected function checkSEF(): void
     {
         $arVariables = [];
         $arDefaultUrlTemplates404 = [
-            "manufacturer_list" => "",
-            "model_list" => "#MANUFACTURER#/",
-            "laptop_list" => "#MANUFACTURER#/#MODEL#/",
+            'manufacturer_list' => '',
+            'model_list' => '#MANUFACTURER#/',
+            'laptop_list' => '#MANUFACTURER#/#MODEL#/',
         ];
 
         $arUrlTemplates = CComponentEngine::makeComponentUrlTemplates(
-            $arDefaultUrlTemplates404,
-            $this->arParams["SEF_URL_TEMPLATES"]
+            arDefaultUrlTemplates: $arDefaultUrlTemplates404,
+            arCustomUrlTemplates: $this->arParams['SEF_URL_TEMPLATES']
         );
 
-        $engine = new CComponentEngine($this);
+        $engine = new CComponentEngine(component: $this);
+
         $componentPage = $engine->guessComponentPath(
-            $this->arParams["SEF_FOLDER"],
-            $arUrlTemplates,
-            $arVariables
+            folder404: $this->arParams['SEF_FOLDER'],
+            arUrlTemplates: $arUrlTemplates,
+            arVariables: $arVariables
         );
 
         if (!$componentPage) {
-            $componentPage = "manufacturer_list";
+            $componentPage = 'manufacturer_list';
         }
 
-        CComponentEngine::initComponentVariables($componentPage, [], [], $arVariables);
+        CComponentEngine::initComponentVariables(
+            componentPage: $componentPage,
+            arComponentVariables: [],
+            arVariableAliases: [],
+            arVariables: $arVariables
+        );
 
-        $this->arResult["VARIABLES"] = $arVariables;
-        $this->arResult["COMPONENT_PAGE"] = $componentPage;
+        $this->arResult['VARIABLES'] = $arVariables;
+        $this->arResult['COMPONENT_PAGE'] = $componentPage;
     }
 
 
     /**
-     * Пагинация основана на текущем запросе и заданных параметрах (количество элементов на странице и текущая страница).
-     * @return PageNavigation Объект пагинации
+     * @description Get pagination number
+     *
+     * @return PageNavigation
      */
-    protected function getPagination()
+    protected function getPagination(): PageNavigation
     {
         $request = Context::getCurrent()?->getRequest();
-        $pageSize = max((int)$request->getQuery("page_size"), 5); // Минимум 10 элементов на странице
-        $pageNumber = max((int)$request->getQuery("page"), 1); // Минимум первая страница
 
-        $nav = new PageNavigation("page");
+        $pageSize = max((int)$request->getQuery(name: 'page_size'), 5);
+
+        $pageNumber = max(
+            str_replace(search: 'page-', replace: '', subject: $request->getQuery(name: 'page') ?? '1'),
+            1
+        );
+
+        $nav = new PageNavigation('page');
         $nav->allowAllRecords(false)
             ->setPageSize($pageSize)
             ->setCurrentPage($pageNumber);

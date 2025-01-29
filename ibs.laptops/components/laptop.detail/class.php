@@ -42,15 +42,15 @@ final class LaptopDetailComponent extends CBitrixComponent
 
         $laptop = LaptopTable::query()
             ->setSelect(select: ['*', 'MODEL', 'MODEL.MANUFACTURER'])
-            ->where(filter: ['ID', $laptopId])
+            ->where('ID' ,$laptopId)
             ->fetchObject();
 
         if ($laptop) {
             $this->arResult['LAPTOP'] = [
                 'TITLE' => $laptop->getTitle(),
-                'MODEL_NAME' => $laptop->getModel() ? $laptop->getModel()->getName() : '',
-                'MANUFACTURER_NAME' => $laptop->getModel() && $laptop->getModel()->getManufacturer()
-                    ? $laptop->getModel()->getManufacturer()->getName()
+                'MODEL_TITLE' => $laptop->getModel() ? $laptop->getModel()->getTitle() : '',
+                'MANUFACTURER_TITLE' => $laptop->getModel() && $laptop->getModel()->getManufacturer()
+                    ? $laptop->getModel()->getManufacturer()->getTitle()
                     : '',
                 'PRICE' => $laptop->getPrice() ?? '',
                 'YEAR' => $laptop->getYear() ?? '',
@@ -80,7 +80,7 @@ final class LaptopDetailComponent extends CBitrixComponent
     {
         return LaptopOptionTable::getList(
             parameters: [
-                'select' => ['OPTION_ID', 'OPTION_NAME' => 'OPTION.NAME'],
+                'select' => ['OPTION_ID', 'OPTION_TITLE' => 'OPTION.TITLE'],
                 'filter' => ['LAPTOP_ID' => $laptopId],
                 'runtime' => [
                     new ReferenceField(

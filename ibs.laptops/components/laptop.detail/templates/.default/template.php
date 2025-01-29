@@ -23,8 +23,8 @@ use \Bitrix\Main\Localization\Loc;
                 <div class="col-md-6">
                     <h5 class="card-subtitle mb-3 text-muted"> <?= Loc::getMessage(code: 'IBS_LAPTOP_DETAIL') ?>: </h5>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item"> <?= Loc::getMessage(code: 'IBS_LAPTOP_DETAIL') ?> : <strong><?= $arResult['LAPTOP']['MANUFACTURER_NAME'] ?></strong></li>
-                        <li class="list-group-item"> <?= Loc::getMessage(code: 'IBS_LAPTOP_MODEL') ?> : <strong><?= $arResult['LAPTOP']['MODEL_NAME'] ?></strong></li>
+                        <li class="list-group-item"> <?= Loc::getMessage(code: 'IBS_LAPTOP_MANUFACTURER') ?> : <strong><?= $arResult['LAPTOP']['MANUFACTURER_TITLE'] ?></strong></li>
+                        <li class="list-group-item"> <?= Loc::getMessage(code: 'IBS_LAPTOP_MODEL') ?> : <strong><?= $arResult['LAPTOP']['MODEL_TITLE'] ?></strong></li>
                         <li class="list-group-item"> <?= Loc::getMessage(code: 'IBS_LAPTOP_TITLE') ?> : <strong><?= $arResult['LAPTOP']['TITLE'] ?></strong></li>
                         <li class="list-group-item"> <?= Loc::getMessage(code: 'IBS_LAPTOP_YEAR') ?>: <strong><?= $arResult['LAPTOP']['YEAR'] ?></strong></li>
                         <li class="list-group-item"> <?= Loc::getMessage(code: 'IBS_LAPTOP_PRICE') ?> : <span class="badge bg-success"><?= $arResult['LAPTOP']['PRICE']. ' ' . Loc::getMessage(code: 'IBS_LAPTOP_CURRENCY') ?> </span></li>
@@ -47,7 +47,7 @@ use \Bitrix\Main\Localization\Loc;
                 <ul class="list-group">
                     <?php foreach ($arResult['OPTIONS'] as $option): ?>
                         <li class="list-group-item">
-                            <i class="bi bi-check-circle-fill text-success me-2"></i><?= $option['OPTION_NAME'] ?>
+                            <i class="bi bi-check-circle-fill text-success me-2"></i><?= $option['OPTION_TITLE'] ?>
                         </li>
                     <?php endforeach; ?>
                 </ul>

@@ -34,7 +34,7 @@ final class LaptopMainComponent extends CBitrixComponent
             return;
         }
 
-        $componentPage = $this->checkSef();
+        $componentPage = $this->checkSEF();
 
         if (!$componentPage) {
             Tools::process404(
@@ -69,9 +69,9 @@ final class LaptopMainComponent extends CBitrixComponent
      *
      * @return string
      */
-    protected function checkSef(): string
+    protected function checkSEF(): string
     {
-        $arDefaultUrlTemplates404 = [
+        $arDefaultUrlTemplates = [
             'laptop_detail' => 'detail/#LAPTOP#/',
             'manufacturer_list' => '',
             'model_list' => '#MANUFACTURER#/',
@@ -79,7 +79,7 @@ final class LaptopMainComponent extends CBitrixComponent
         ];
 
         $arUrlTemplates = CComponentEngine::makeComponentUrlTemplates(
-            arDefaultUrlTemplates: $arDefaultUrlTemplates404,
+            arDefaultUrlTemplates: $arDefaultUrlTemplates,
             arCustomUrlTemplates: $this->arParams['SEF_URL_TEMPLATES']
         );
         $arVariableAliases = CComponentEngine::makeComponentVariableAliases(
