@@ -19,7 +19,7 @@ use Bitrix\Main\IO\Directory;
 use IBS\Shop\ORM\DatabaseSeeder;
 use IBS\Shop\ORM\LaptopOptionTable;
 use IBS\Shop\ORM\LaptopTable;
-use IBS\Shop\ORM\ManufactureTable;
+use IBS\Shop\ORM\ManufacturerTable;
 use IBS\Shop\ORM\ModelTable;
 use IBS\Shop\ORM\OptionTable;
 
@@ -53,7 +53,7 @@ final class ibs_laptops extends CModule
         $connection = Application::getConnection();
 
         $models = [
-            ManufactureTable::class,
+            ManufacturerTable::class,
             ModelTable::class,
             LaptopTable::class,
             OptionTable::class,
@@ -82,7 +82,7 @@ final class ibs_laptops extends CModule
         $connection = Application::getConnection();
 
         $tables = [
-            ManufactureTable::class,
+            ManufacturerTable::class,
             ModelTable::class,
             LaptopTable::class,
             OptionTable::class,

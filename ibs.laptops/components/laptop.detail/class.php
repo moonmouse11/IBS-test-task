@@ -20,7 +20,7 @@ use IBS\Shop\ORM\OptionTable;
 final class LaptopDetailComponent extends CBitrixComponent
 {
     /**
-     * @description Метод для отображения детальной информации о выбранном ноутбуке
+     * @description Execute component.
      *
      * @return void
      *
@@ -36,7 +36,6 @@ final class LaptopDetailComponent extends CBitrixComponent
     {
         if (!Loader::includeModule(moduleName: 'ibs.laptops')) {
             ShowError(strError: 'Module ibs.laptops not loaded');
-            return;
         }
 
         $laptopId = (int)$this->arParams['LAPTOP_ID'];
@@ -47,8 +46,8 @@ final class LaptopDetailComponent extends CBitrixComponent
             ->fetchObject();
 
         if ($laptop) {
-            $this->arResult['NOTEBOOK'] = [
-                'NAME' => $laptop->getName(),
+            $this->arResult['LAPTOP'] = [
+                'TITLE' => $laptop->getTitle(),
                 'MODEL_NAME' => $laptop->getModel() ? $laptop->getModel()->getName() : '',
                 'MANUFACTURER_NAME' => $laptop->getModel() && $laptop->getModel()->getManufacturer()
                     ? $laptop->getModel()->getManufacturer()->getName()
@@ -68,7 +67,7 @@ final class LaptopDetailComponent extends CBitrixComponent
 
 
     /**
-     * @description Получение привязанных опций ноутбука.
+     * @description Get laptop options list.
      *
      * @param int $laptopId
      * @return array

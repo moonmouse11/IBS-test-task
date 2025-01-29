@@ -81,7 +81,7 @@ final class DatabaseSeeder
 
         foreach (self::MANUFACTURERS as $manufacturer) {
             try {
-                ManufactureTable::add(data: $manufacturer);
+                ManufacturerTable::add(data: $manufacturer);
             } catch (SystemException $e) {
                 $APPLICATION->ThrowException(
                     msg: Loc::getMessage(code: 'IBS_LAPTOPS_SEEDER_MANUFACTURER_FAIL') . $e->getMessage()

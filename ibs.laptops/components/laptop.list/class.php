@@ -6,61 +6,67 @@ if (!defined(constant_name: 'B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) 
     die();
 }
 
+use Bitrix\Main\ArgumentException;
 use Bitrix\Main\Loader;
 use Bitrix\Main\Context;
 use Bitrix\Main\LoaderException;
+use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\ObjectPropertyException;
+use Bitrix\Main\SystemException;
 use Bitrix\Main\UI\PageNavigation;
 use IBS\Shop\ORM\LaptopTable;
-use IBS\Shop\ORM\ManufactureTable;
+use IBS\Shop\ORM\ManufacturerTable;
 use IBS\Shop\ORM\ModelTable;
 
 final class LaptopListComponent extends CBitrixComponent
 {
 
     /**
+     * @description Execute component
+     *
      * @return void
+     *
      * @throws LoaderException
+     * @throws ArgumentException
+     * @throws ObjectPropertyException
+     * @throws SystemException
+     *
      * @see parent::executeComponent()
      */
     public function executeComponent(): void
     {
         if (!Loader::includeModule(moduleName: 'ibs.laptops')) {
-            ShowError(strError: 'Module ibs.laptops not loaded');
+            ShowError(strError: Loc::getMessage(code: 'IBS_LAPTOPS_NOT_LOADED'));
             return;
         }
 
-        $this->arResult = [];
         $this->determineLevel();
-        $componentPage = '';
-        $comp = $this->arResult['COMPONENT_PAGE'];
+        $componentPage = $this->arResult['COMPONENT_PAGE'];
         $usePagination = false;
 
 
-        if ($comp === 'manufacturer_list') {
-            $componentPage = 'manufacturer_list';
-            $className = ManufactureTable::class;
+        if ($componentPage === 'manufacturer_list') {
+            $className = ManufacturerTable::class;
             $parameters = [
                 'select' => ['ID', 'TITLE'],
-                'order' => ['NAME' => 'ASC']
+                'order' => ['TITLE' => 'ASC']
             ];
         }
 
-        if ($comp === 'model_list') {
-            $componentPage = 'model_list';
+        if ($componentPage === 'model_list') {
             $className = ModelTable::class;
             $parameters = [
                 'select' => ['ID', 'TITLE'],
-                'filter' => ['MANUFACTURER.ID' => $this->arResult["VARIABLES"]["BRAND"]],
-                'order' => ['NAME' => 'ASC']
+                'filter' => ['MANUFACTURER.ID' => $this->arResult['VARIABLES']['MANUFACTURER']],
+                'order' => ['TITLE' => 'ASC']
             ];
         }
 
-        if ($comp === 'notebook_list') {
-            $componentPage = 'notebook_list';
+        if ($componentPage === 'laptop_list') {
             $className = LaptopTable::class;
             $parameters = [
                 'select' => ['ID', 'TITLE', 'YEAR', 'PRICE', 'LIST_IMAGE', 'DETAIL_IMAGE'],
-                'filter' => ['MODEL.ID' => $this->arResult["VARIABLES"]["MODEL"]],
+                'filter' => ['MODEL.ID' => $this->arResult['VARIABLES']['MODEL']],
             ];
             $usePagination = true;
         }
@@ -78,14 +84,14 @@ final class LaptopListComponent extends CBitrixComponent
                 $request->getQuery("sort_order") : 'ASC'; // По умолчанию по возрастанию
 
             $parameters['order'] = [$sortBy => $sortOrder]; // Обновляем параметры сортировки
-            $this->arResult['REQUEST'] = Context::getCurrent()->getRequest();
+            $this->arResult['REQUEST'] = Context::getCurrent()?->getRequest();
         }
 
         if (mb_strlen($componentPage) == 0) {
             $componentPage = 'undefined';
         }
 
-        if ($componentPage != 'undefined') {
+        if ($componentPage !== 'undefined') {
             $items = $className::getList($parameters);
             if ($usePagination) {
                 $totalCount = $className::getCount(
@@ -113,8 +119,8 @@ final class LaptopListComponent extends CBitrixComponent
         $arVariables = [];
         $arDefaultUrlTemplates404 = [
             "manufacturer_list" => "",
-            "model_list" => "#BRAND#/",
-            "notebook_list" => "#BRAND#/#MODEL#/",
+            "model_list" => "#MANUFACTURER#/",
+            "laptop_list" => "#MANUFACTURER#/#MODEL#/",
         ];
 
         $arUrlTemplates = CComponentEngine::makeComponentUrlTemplates(

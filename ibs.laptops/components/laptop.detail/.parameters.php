@@ -1,5 +1,9 @@
 <?php
 
+if (!defined(constant_name: 'B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true) {
+    die();
+}
+
 $arComponentParameters = [
     'GROUPS' => [
         'VISUAL' => [
@@ -18,9 +22,9 @@ $arComponentParameters = [
             'NAME' => 'Тип кэширования',
             'TYPE' => 'LIST',
             'VALUES' => [
-                'A' => "Авто",
-                'Y' => "Включить",
-                'N' => "Выключить",
+                'A' => 'Авто',
+                'Y' => 'Включить',
+                'N' => 'Выключить',
             ],
             'DEFAULT' => 'A',
         ],

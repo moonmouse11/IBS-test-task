@@ -1,0 +1,19 @@
+<?php
+
+$MESS['IBS_LAPTOP_LIST'] = 'List of laptops';
+
+$MESS['IBS_LAPTOP_FORM_SORTED'] = 'Sort by';
+$MESS['IBS_LAPTOP_FORM_PRICE'] = 'Price';
+$MESS['IBS_LAPTOP_FORM_YEAR'] = 'Year';
+$MESS['IBS_LAPTOP_FORM_SORT_BY_ASC'] = 'Ascending';
+$MESS['IBS_LAPTOP_FORM_SORT_BY_DESC'] = 'Descending';
+$MESS['IBS_LAPTOP_FORM_APPLY'] = 'Apply';
+$MESS['IBS_LAPTOP_FORM_ORDER'] = 'Sort order';
+$MESS['IBS_LAPTOP_FORM_PER_PAGE'] = 'On page';
+
+$MESS['IBS_LAPTOP_RELEASE_YEAR'] = 'Release year';
+$MESS['IBS_LAPTOP_RELEASE_PRICE_NAME'] = 'Price';
+$MESS['IBS_LAPTOP_RELEASE_CURRENCY'] = 'rub.';
+
+$MESS['IBS_LAPTOP_VIEW'] = 'Go to the laptops';
+$MESS['IBS_LAPTOP_MODELS_NOT_FOUND'] = 'Models not found';

@@ -9,7 +9,7 @@ use Bitrix\Main\ORM\Fields\IntegerField;
 use Bitrix\Main\ORM\Fields\StringField;
 use Bitrix\Main\SystemException;
 
-final class ManufactureTable extends DataManager
+final class ManufacturerTable extends DataManager
 {
     public static function getTableName(): string
     {

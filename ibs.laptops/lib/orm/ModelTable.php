@@ -46,7 +46,7 @@ final class ModelTable extends DataManager
                 ]),
             new Reference(
                 name: 'MANUFACTURER',
-                referenceEntity: ManufactureTable::class,
+                referenceEntity: ManufacturerTable::class,
                 referenceFilter: Join::on('this.MANUFACTURER_ID', 'ref.ID')
             ),
         ];
